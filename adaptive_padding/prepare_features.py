@@ -15,8 +15,6 @@ from adaptive_padding.constants import FolderPath
 from adaptive_padding.experiment.evaluation import ExperimentConfiguration
 from adaptive_padding.utils.utils import create_folder
 
-import pdb
-
 
 class Feature:
 	def __init__(self, csv_folder, output_folder):
@@ -160,6 +158,7 @@ def process_file(csv_folder: str, output_folder: str, filename: str):
 	dataset = features.encode_labels(dataset)
 	dataset = Feature.filter_iot_devices(dataset)
 	dataset.drop(dataset["Length"][dataset["Length"] == "None"].index, inplace=True)
+	dataset = dataset.dropna()
 	features.group_samples_per_second(dataset)
 	iot_features = features.create_features()
 	iot_features.dropna(inplace=True)
@@ -169,7 +168,6 @@ def process_file(csv_folder: str, output_folder: str, filename: str):
 
 def iterate_over_files(csv_folder: str, output_folder: str):
 	files = glob(join(csv_folder, "*.xz"))
-	breakpoint()
 	partial_process_file = partial(process_file, csv_folder, output_folder)
 	with ProcessPoolExecutor(max_workers=cpu_count()) as executor:
 		executor.map(partial_process_file, files)

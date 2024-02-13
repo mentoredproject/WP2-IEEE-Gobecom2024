@@ -1,9 +1,9 @@
+import json
 import os
 from concurrent.futures import ThreadPoolExecutor
 from os import cpu_count
 from os.path import join
 from typing import Tuple
-import json
 
 import numpy as np
 import pandas as pd
@@ -13,6 +13,7 @@ from sklearn.model_selection import StratifiedKFold
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
+from tqdm import tqdm
 
 from adaptive_padding.constants import FolderPath
 from adaptive_padding.experiment.evaluation import ExperimentConfiguration
@@ -130,24 +131,11 @@ class Experiment:
 		with open(filename, mode="w") as file_writer:
 			json.dump(classifiers_performance, file_writer)
 
-			# with open(filename, mode='a') as file_writer:
-			# 	file_writer.write("\n\n\n")
-			# 	file_writer.write(f"{classifier}.\n")
-			# 	file_writer.write("Average accuracy: %s\n"%(np.mean(self.classifiers[classifier][0])))
-			# 	file_writer.write("Min accuracy: %s\n"%(np.min(self.classifiers[classifier][0])))
-			# 	file_writer.write("Max accuracy: %s\n"%(np.max(self.classifiers[classifier][0])))
-			# 	file_writer.write("Average recall: %s\n"%(np.mean(self.classifiers[classifier][1])))
-			# 	file_writer.write("Min recall: %s\n"%(np.min(self.classifiers[classifier][1])))
-			# 	file_writer.write("Max recall: %s\n"%(np.max(self.classifiers[classifier][1])))
-			# 	file_writer.write("Average f1_score: %s\n"%(np.mean(self.classifiers[classifier][2])))
-			# 	file_writer.write("Min f1_score: %s\n"%(np.min(self.classifiers[classifier][2])))
-			# 	file_writer.write("Max f1_score: %s\n"%(np.max(self.classifiers[classifier][2])))
-	
 	def run_train_test_split(self):
 		"""
 		It performs an experiment in which classifiers are trained with features calculated from the original IoT traffic, while testing these models with features calculated from the traffic changed by padding strategy. 
 		"""
-		for filename in self.filenames:
+		for filename in tqdm(self.filenames):
 			self.train_data = pd.read_csv(os.path.join(self.__ground_truth_folder_features, f"{filename}.tar.xz_features.csv"))
 			self.test_data = pd.read_csv(os.path.join(self.__padding_folder_features, self.__padding_strategy, f"{filename.replace('.csv', '.xz')}_features.csv"))
 

@@ -22,7 +22,7 @@ class Level900(PaddingStrategy):
         try:
             if length < self.mtu_number_bytes:
                 if length < self.__threshold:
-                    self.extra_bytes = self.__threshold - length
+                    self.__extra_bytes = self.__threshold - length
                     self.__memory[length] = length + self.__extra_bytes
                 elif length > self.__threshold and length < 999:
                     upper_bound = 1000 - length
