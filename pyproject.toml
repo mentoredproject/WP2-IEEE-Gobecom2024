@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "adaptive-packet-padding-approach-for-smart-home-networks-a-tradeoff-between-privacy-and-performance"
+name = "adaptive_padding"
 version = "0.1.0"
 description = ""
 authors = ["ajp"]
