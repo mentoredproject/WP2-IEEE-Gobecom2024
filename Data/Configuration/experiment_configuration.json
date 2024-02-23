@@ -1,0 +1,4 @@
+{
+    "padding":"Existing",
+    "padding_strategies": ["exponential", "linear", "mouse_elephant", "mtu", "random", "random255"]
+}
