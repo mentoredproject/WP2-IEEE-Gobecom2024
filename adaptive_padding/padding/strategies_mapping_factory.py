@@ -4,7 +4,7 @@ from adaptive_padding.padding.adaptive_padding.level100 import Level100
 from adaptive_padding.padding.adaptive_padding.level500 import Level500
 from adaptive_padding.padding.adaptive_padding.level700 import Level700
 from adaptive_padding.padding.adaptive_padding.level900 import Level900
-from adaptive_padding.padding.dynamic_programming.dp_padding import DynamicProgrammingPadding
+from adaptive_padding.padding.nearest.nearest_padding import NearestPadding
 from adaptive_padding.padding.existing.exponential_padding import ExponentialPadding
 from adaptive_padding.padding.existing.linear import LinearPadding
 from adaptive_padding.padding.existing.mouse_elephant import MouseElephant
@@ -33,7 +33,7 @@ def create_proposal_strategies_mapping() -> Dict[str, PaddingStrategy]:
     }
 
 
-def create_dynamic_strategies_mapping() -> Dict[str, PaddingStrategy]:
+def create_nearest_strategies_mapping() -> Dict[str, PaddingStrategy]:
     return {
-        "dp": DynamicProgrammingPadding()
+        "near": NearestPadding()
     }

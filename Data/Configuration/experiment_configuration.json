@@ -1,4 +1,4 @@
 {
-    "padding":"Proposal",
-    "padding_strategies": ["dp", "level100", "level500", "level700", "level900"]
+    "padding":"Existing",
+    "padding_strategies": ["exponential", "linear", "mouse_elephant", "mtu", "random", "random255"]
 }

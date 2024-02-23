@@ -158,7 +158,6 @@ def process_file(csv_folder: str, output_folder: str, filename: str):
 	dataset = features.encode_labels(dataset)
 	dataset = Feature.filter_iot_devices(dataset)
 	dataset.drop(dataset["Length"][dataset["Length"] == "None"].index, inplace=True)
-	dataset = dataset.dropna()
 	features.group_samples_per_second(dataset)
 	iot_features = features.create_features()
 	iot_features.dropna(inplace=True)

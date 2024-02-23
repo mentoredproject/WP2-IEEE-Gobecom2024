@@ -3,6 +3,7 @@ import os
 from concurrent.futures import ThreadPoolExecutor
 from os import cpu_count
 from os.path import join
+from random import seed
 from typing import Tuple
 
 import numpy as np
@@ -18,6 +19,8 @@ from tqdm import tqdm
 from adaptive_padding.constants import FolderPath
 from adaptive_padding.experiment.evaluation import ExperimentConfiguration
 
+seed(42)
+
 
 class Experiment:
 	def __init__(self, padding_strategy, ground_truth_folder_features, padding_folder_features):
@@ -30,6 +33,8 @@ class Experiment:
 		paddingFolderFeatures: folder where the files with traffic features modified by the padding strategy are located.
 		"""
 		self.filenames = [
+			'16-09-23.csv',
+			'16-09-24.csv',
 			'16-09-25.csv',
 			'16-09-26.csv',
 			'16-09-27.csv',

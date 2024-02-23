@@ -16,9 +16,6 @@ seed(42)
 
 def main():
     strategies: Dict[str, PaddingStrategy] = create_proposal_strategies_mapping()
-    strategies.pop("level100")
-    strategies.pop("level500")
-    strategies.pop("level700")
     experiment = PaddingExperiment(
         FolderPath.RAW_DATA.value,
         join(FolderPath.PADDING_DATA.value, "Proposal"),

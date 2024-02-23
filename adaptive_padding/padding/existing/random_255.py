@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from random import randint
 
-from adaptive_padding.padding.padding_strategy import PaddingStrategy
+from adaptive_padding.padding.padding_strategy import PaddingStrategy, pad_length_equal_to_or_greater_than_mtu
 
 
 @dataclass
@@ -13,6 +13,7 @@ class Random255(PaddingStrategy):
         self.__LOWER_BOUND = 1
         self.__UPPER_BOUND = 255
 
+    @pad_length_equal_to_or_greater_than_mtu
     def pad(self, length: int) -> int:
         if length >= self.mtu_number_bytes:
             return length

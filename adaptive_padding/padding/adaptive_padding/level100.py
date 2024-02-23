@@ -3,6 +3,7 @@ from random import randint
 from typing import Dict
 
 from adaptive_padding.padding.padding_strategy import PaddingStrategy
+from adaptive_padding.padding.padding_strategy import pad_length_equal_to_or_greater_than_mtu
 
 
 @dataclass
@@ -14,10 +15,10 @@ class Level100(PaddingStrategy):
         self.__threshold = 100
         self.__extra_bytes = 0
 
+    @pad_length_equal_to_or_greater_than_mtu
     def pad(self, length: int) -> int:
         if length in self.__memory:
             return self.__memory.get(length)
-
         try:
             if length < self.__threshold:
                 self.__extra_bytes = self.__threshold - length

@@ -20,6 +20,12 @@ def test_level900_when_between_999_and_1399_return_within_this_interval(create_l
 
 
 @mark.parametrize("length", [1400, 1499])
-def test_level900_when_greater_or_equal_than_1400_return_1500(level900_padding, length):
-    actual: int = level900_padding.pad(length)
+def test_level900_when_greater_than_or_equal_to_1400_return_1500(create_level900_padding, length):
+    actual: int = create_level900_padding.pad(length)
     assert actual == 1500
+
+
+@mark.parametrize("length", [1500, 1501, 1502, 1510, 1514])
+def test_level900_when_greater_than_or_equal_to_1500_return_same_length(create_level900_padding, length):
+    actual: int = create_level900_padding.pad(length)
+    assert length == actual
