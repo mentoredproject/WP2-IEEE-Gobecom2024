@@ -40,6 +40,20 @@ export PYTHONPATH=$PYTHONPATH:.
 poetry install
 ```
 
+### Alternative environment (Docker)
+Build a Docker image:
+```sh
+sudo docker build -t packet-padding -f Docker/Dockerfile .
+```
+
+Run the container:
+```sh
+docker run -v ./Data/:/app/Data --rm -it packet-padding
+```
+<span style="color:red">Tip: copy the files generated with the results to the /app/Data/ folder</span>.
+
+When using the Docker container, omit ```poetry run``` from the commands below.
+
 ### Apply padding strategies
 ```sh
 poetry run python3 adaptive_padding/run_existing_padding.py
