@@ -15,6 +15,8 @@ from adaptive_padding.constants import FolderPath
 from adaptive_padding.experiment.evaluation import ExperimentConfiguration
 from adaptive_padding.utils.utils import create_folder
 
+import typer
+
 
 class Feature:
 	def __init__(self, csv_folder, output_folder):
@@ -172,8 +174,8 @@ def iterate_over_files(csv_folder: str, output_folder: str):
 		executor.map(partial_process_file, files)
 
 
-def main():
-	configuration_file = join(FolderPath.CONFIGURATION.value, "experiment_configuration.json")
+def main(filename: str = ""):
+	configuration_file = join(FolderPath.CONFIGURATION.value, filename)
 	setup = ExperimentConfiguration.load_configuration(configuration_file)
 
 	if setup["padding"] != "None" and setup["padding_strategies"] != "None":
@@ -192,4 +194,4 @@ def main():
 
 
 if __name__ == "__main__":
-	main()
+	typer.run(main)

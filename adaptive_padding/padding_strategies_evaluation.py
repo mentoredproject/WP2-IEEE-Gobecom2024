@@ -19,6 +19,8 @@ from tqdm import tqdm
 from adaptive_padding.constants import FolderPath
 from adaptive_padding.experiment.evaluation import ExperimentConfiguration
 
+import typer
+
 seed(42)
 
 
@@ -196,8 +198,8 @@ class Experiment:
 		self.save_classifiers_performance_to_file(f"{self.__padding_strategy}_cross_validation.json")
 
 
-if __name__ == "__main__":
-	configuration_file = os.path.join(FolderPath.CONFIGURATION.value, "experiment_configuration.json")
+def main(filename: str = ""):
+	configuration_file = os.path.join(FolderPath.CONFIGURATION.value, filename)
 	experiment_configuration = ExperimentConfiguration()
 	setup = experiment_configuration.load_configuration(configuration_file)
 	strategies = setup["padding_strategies"]
@@ -208,3 +210,7 @@ if __name__ == "__main__":
 			ground_truth_folder_features=join(FolderPath.GROUND_TRUTH_FEATURES.value),
 			padding_folder_features=join(FolderPath.PADDING_FEATURES.value))
 		experiment.run_train_test_split()
+
+
+if __name__ == "__main__":
+	typer.run(main)
