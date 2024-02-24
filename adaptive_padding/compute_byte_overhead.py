@@ -5,6 +5,7 @@ from os.path import join
 from typing import Dict
 
 import pandas as pd
+import typer
 
 from adaptive_padding.constants import FolderPath
 from adaptive_padding.experiment.evaluation import ExperimentConfiguration
@@ -48,8 +49,8 @@ def write_file(filename: str, overhead: Dict[str, float]):
 		json.dump(overhead, file_writer)
 
 
-def main():
-	configuration_file = join(FolderPath.CONFIGURATION.value, "experiment_configuration.json")
+def main(filename: str = ""):
+	configuration_file = join(FolderPath.CONFIGURATION.value, filename)
 	setup = ExperimentConfiguration.load_configuration(configuration_file)
 	raw_data_length = process_raw_data()
 	byte_overhead = {}
@@ -62,4 +63,4 @@ def main():
 
 
 if __name__ == "__main__":
-	main()
+	typer.run(main)
