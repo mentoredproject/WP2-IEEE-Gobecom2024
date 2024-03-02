@@ -4,6 +4,7 @@ from adaptive_padding.padding.adaptive_padding.level100 import Level100
 from adaptive_padding.padding.adaptive_padding.level500 import Level500
 from adaptive_padding.padding.adaptive_padding.level700 import Level700
 from adaptive_padding.padding.adaptive_padding.level900 import Level900
+from adaptive_padding.padding.nearest.external_integration import JuliaExternalIntegration
 from adaptive_padding.padding.nearest.nearest_padding import NearestPadding
 from adaptive_padding.padding.existing.exponential_padding import ExponentialPadding
 from adaptive_padding.padding.existing.linear import LinearPadding
@@ -34,6 +35,8 @@ def create_proposal_strategies_mapping() -> Dict[str, PaddingStrategy]:
 
 
 def create_nearest_strategies_mapping() -> Dict[str, PaddingStrategy]:
+    julia_command = ["julia", "adaptive_padding/padding/nearest/OptimalPadding.jl"]
+    julia_external_integration = JuliaExternalIntegration(julia_command)
     return {
-        "near": NearestPadding()
+        "near": NearestPadding(julia_external_integration)
     }

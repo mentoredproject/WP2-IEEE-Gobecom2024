@@ -1,17 +1,17 @@
 from dataclasses import dataclass, field
-
 from typing import List, Dict
 
+from adaptive_padding.padding.nearest.external_integration import ExternalIntegration
 from adaptive_padding.padding.padding_strategy import PaddingStrategy, pad_length_equal_to_or_greater_than_mtu
 
 
 @dataclass
 class NearestPadding(PaddingStrategy):
+    external_integration: ExternalIntegration
     __memory: Dict[int, int] = field(default_factory=dict)
 
     def __post_init__(self):
-        self.lengths: List[int] =\
-            [100, 500, 1000, 1500]
+        self.lengths: List[int] = self.external_integration.execute()
 
     @pad_length_equal_to_or_greater_than_mtu
     def pad(self, length: int) -> int:

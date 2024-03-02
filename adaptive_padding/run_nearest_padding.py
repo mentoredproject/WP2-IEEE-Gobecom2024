@@ -4,7 +4,7 @@ from typing import Dict
 from adaptive_padding.experiment.evaluation import PaddingExperiment
 from adaptive_padding.padding.padding_strategy import PaddingStrategy
 from adaptive_padding.padding.strategies_mapping_factory import create_nearest_strategies_mapping
-from constants import FolderPath
+from adaptive_padding.constants import FolderPath
 
 
 def main():

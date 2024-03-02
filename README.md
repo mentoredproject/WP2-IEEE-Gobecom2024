@@ -22,6 +22,30 @@ A. J. Pinheiro, P. Freitas de Araujo-Filho, J. de M. Bezerra and D. R. Campelo, 
 @ARTICLE{9203848,  
 author={Pinheiro, Antônio J. and Freitas de Araujo-Filho, Paulo and de M. Bezerra, Jeandro and Campelo, Divanilson R.},  journal={IEEE Internet of Things Journal},  title={Adaptive Packet Padding Approach for Smart Home Networks: A Tradeoff Between Privacy and Performance},  year={2021},  volume={8},  number={5},  pages={3930-3938},  doi={10.1109/JIOT.2020.3025988}}
 
+
+## Configuring the environment for running Julia
+
+### Install Julia
+```sh
+wget https://julialang-s3.julialang.org/bin/linux/x64/1.10/julia-1.10.2-linux-x86_64.tar.gz
+```
+```sh
+tar zxvf julia-1.10.2-linux-x86_64.tar.gz -C /opt
+```
+
+```sh
+export PATH="$PATH:/opt/julia-1.10.2/bin"
+```
+
+```sh
+julia --version
+```
+
+### Install dependencies
+```sh
+julia adaptive_padding/padding/nearest/install_dependencies.jl 
+```
+
 ## Run the experiment (using poetry)
 Inside project root folder:
 
@@ -46,10 +70,16 @@ Build a Docker image:
 sudo docker build -t packet-padding -f Docker/Dockerfile .
 ```
 
-Run the container:
+Run the container (Linux):
 ```sh
 docker run -v ./Data/:/app/Data --rm -it packet-padding
 ```
+
+Run the container (Windows):
+```sh
+docker run -v .\Data\:/app/Data --rm -it packet-padding
+```
+
 <span style="color:red">Tip: copy the files generated with the results to the /app/Data/ folder</span>.
 
 When using the Docker container, omit ```poetry run``` from the commands below.

@@ -4,7 +4,7 @@ export n, C, v, discrete_optimal_padding
 
 using CSV, DataFrames, StatsBase
 
-v = CSV.read("/home/criston/Documentos/traffic_obfuscation/packet_sizes.csv", DataFrame).Length
+v = CSV.read("Data/OnlyIoT/packet_sizes.csv", DataFrame).Length
 
 # vou usar frequências nos algoritmos (int), e depois divido por lenght(v)
 p = countmap(v)
