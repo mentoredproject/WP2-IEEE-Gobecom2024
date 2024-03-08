@@ -1,4 +1,4 @@
 {
     "padding":"Proposal",
-    "padding_strategies":["100", "500", "700", "900"]
+    "padding_strategies":["level100", "level500", "level700", "level900"]
 }

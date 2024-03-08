@@ -3,8 +3,6 @@ from dataclasses import dataclass
 from subprocess import run, PIPE
 from typing import List
 
-import pdb
-
 
 class ExternalIntegration(ABC):
     @abstractmethod
@@ -24,5 +22,4 @@ class JuliaExternalIntegration(ExternalIntegration):
         packet_sizes = command_output.split("\n")[1].split('[')[1].replace(
             '])',
             '').split(', ')
-        breakpoint()
         return [int(x) for x in packet_sizes]

@@ -14,6 +14,8 @@ from adaptive_padding.padding.existing.random import RandomPadding
 from adaptive_padding.padding.existing.random_255 import Random255
 from adaptive_padding.padding.padding_strategy import PaddingStrategy
 
+from os.path import join
+
 
 def create_existing_strategies_mapping() -> Dict[str, PaddingStrategy]:
     return {
@@ -35,7 +37,7 @@ def create_proposal_strategies_mapping() -> Dict[str, PaddingStrategy]:
 
 
 def create_nearest_strategies_mapping() -> Dict[str, PaddingStrategy]:
-    julia_command = ["julia", "adaptive_padding/padding/nearest/OptimalPadding.jl"]
+    julia_command = ["julia", join("adaptive_padding", "padding", "nearest" "OptimalPadding.jl")]
     julia_external_integration = JuliaExternalIntegration(julia_command)
     return {
         "near": NearestPadding(julia_external_integration)
