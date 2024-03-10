@@ -33,11 +33,18 @@ def setup_graph(func):
 
 
 @setup_graph
-def make_barplot(x, y, x_label: str, y_label: str, filename: str, hue: List[str]):
-    palette = color_palette("colorblind", n_colors=len(x) // NUMBER_ALGORITHMS)
-    sorted_x, sorted_y = _sort_values(x, y)
-    barplot(x=sorted_x, y=sorted_y, hue=hue, palette=palette)
-    barplot(x=x, y=y, hue=hue, palette=palette,order=x)
+def make_barplot(x, y, x_label: str, y_label: str, filename: str, hue: List[str],order:bool=False):
+    if order:
+        palette = color_palette("colorblind", n_colors=len(x))
+        sorted_x, sorted_y = _sort_values(x, y)
+        actual_hue = sorted_x
+
+    else:
+        palette = color_palette("colorblind", n_colors=len(x) // NUMBER_ALGORITHMS)
+        sorted_x=x
+        sorted_y=y
+        actual_hue = hue
+    barplot(x=sorted_x, y=sorted_y, hue=actual_hue, palette=palette)
 
 
 @setup_graph

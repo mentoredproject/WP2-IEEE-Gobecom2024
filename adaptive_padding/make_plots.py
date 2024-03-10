@@ -13,21 +13,25 @@ def load_file(filepath: str):
 
 
 def organize_data(algorithms: List[str], performance: Dict[str, str], metric_name: str):
+    algorithms_map={"RandomForestClassifier()":"Random Forest",
+     "SVC()":"SVM",
+     "DecisionTreeClassifier()":"DT",
+     "KNeighborsClassifier()":"KNN"}
     algorithm_names = []
     average_accuracy = []
     strategies = []
     for algorithm in algorithms:
         for strategy in performance:
-            algorithm_names.append(algorithm)
+            algorithm_names.append(algorithms_map[algorithm])
             average_accuracy.append(get_performance(
                 algorithm,
                 performance,
                 strategy,
                 metric_name))
             strategies.append(strategy)
-    algorithm_names = list(map(
-        lambda name: name.replace("()", ""),
-        algorithm_names))
+    #algorithm_names = list(map(
+    #    lambda name: name.replace("()", ""),
+    #    algorithm_names))
     return algorithm_names, average_accuracy, strategies
 
 
@@ -72,7 +76,9 @@ def main():
             filename=f"byte_overhead_{metric_name.replace(' ', '_')}.png",
             hue=algorithm_names,
             style=strategies)
-        make_barplot(strategies,byte_overhead_per_strategy,x_label="strategies",y_label="byte overhead (%)",filename="byte_overhead.png",hue=strategies)
+        unique_strategies = list(set(strategies))
+        byte_overhead_strategy = [byte_overhead[strategy] *100 for strategy in unique_strategies]
+        make_barplot(unique_strategies,byte_overhead_strategy,x_label="strategies",y_label="byte overhead (%)",filename="byte_overhead.png",hue=unique_strategies,order=True)
 
 
 if __name__ == "__main__":
