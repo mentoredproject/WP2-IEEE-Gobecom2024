@@ -1,4 +1,5 @@
 from typing import Dict, List
+from sys import argv
 
 from adaptive_padding.utils.graphs.graph import make_barplot, make_scatterplot
 
@@ -40,7 +41,7 @@ def get_performance(algorithm: str, performance: Dict[str, str], strategy: str, 
 
 
 def main():
-    files: List[str] = glob("*_train_test_split.json")
+    files: List[str] = glob(argv[1])
     performance = {}
     for file in files:
         performance[file.split("_")[0]] = load_file(file)
@@ -50,7 +51,8 @@ def main():
         "DecisionTreeClassifier()",
         "KNeighborsClassifier()"]
     metric_names = {"Average accuracy": "Accuracy", "Average recall": "Recall", "Average f1_score": "F1 score"}
-    byte_overhead = load_file("byte_overhead.json")
+    byte_overhead = load_file(argv[2])
+    print(byte_overhead)
     for metric_name, metric_label in metric_names.items():
         algorithm_names, average_accuracy, strategies = organize_data(algorithms, performance, metric_name)
         make_barplot(
@@ -60,6 +62,7 @@ def main():
             y_label=f"{metric_label} (%)",
             filename=f"{metric_name.replace(' ', '_')}.png",
             hue=strategies)
+        print(strategies)
         byte_overhead_per_strategy = [byte_overhead[strategy] * 100 for strategy in strategies]
         make_scatterplot(
             average_accuracy,
@@ -69,6 +72,7 @@ def main():
             filename=f"byte_overhead_{metric_name.replace(' ', '_')}.png",
             hue=algorithm_names,
             style=strategies)
+        make_barplot(strategies,byte_overhead_per_strategy,x_label="strategies",y_label="byte overhead (%)",filename="byte_overhead.png",hue=strategies)
 
 
 if __name__ == "__main__":
