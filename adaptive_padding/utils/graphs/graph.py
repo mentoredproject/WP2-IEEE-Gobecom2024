@@ -8,6 +8,29 @@ set_style("whitegrid")
 NUMBER_ALGORITHMS: int = 4
 
 
+class SingletonMeta(type):
+    _instances = {}
+
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            instance = super().__call__(*args, **kwargs)
+            cls._instances[cls] = instance
+        return cls._instances[cls]
+
+
+class SingletonPalette:
+    instance = None
+    colors = None
+
+    def __new__(cls, *args, **kwargs):
+        if cls.instance is None:
+            cls.instance = super().__new__(cls)
+            cls.colors = {key: value for key, value in zip(
+                kwargs["names"],
+                color_palette("colorblind", n_colors=len(kwargs["names"])))}
+        return cls.instance
+
+
 def _sort_values(x, y) -> Tuple[List[Any], List[Any]]:
     zipped = zip(y, x)
     sorted_values = sorted(zipped, reverse=True)
@@ -28,23 +51,31 @@ def setup_graph(func):
             ncol=len(args[1]),
             fancybox=True,
             shadow=True)
+        plt.xticks(rotation=45, ha="right")
         plt.savefig(kwargs["filename"], bbox_inches="tight")
     return wrapper
 
 
 @setup_graph
-def make_barplot(x, y, x_label: str, y_label: str, filename: str, hue: List[str],order:bool=False):
+def make_barplot(
+        x,
+        y,
+        x_label: str,
+        y_label: str,
+        filename: str,
+        hue: List[str],
+        strategy_names: List[str],
+        order: bool = False):
+    singleton_palette = SingletonPalette(names=list(set(strategy_names)))
+    colors = singleton_palette.colors
     if order:
-        palette = color_palette("colorblind", n_colors=len(x))
         sorted_x, sorted_y = _sort_values(x, y)
         actual_hue = sorted_x
-
     else:
-        palette = color_palette("colorblind", n_colors=len(x) // NUMBER_ALGORITHMS)
-        sorted_x=x
-        sorted_y=y
+        sorted_x = x
+        sorted_y = y
         actual_hue = hue
-    barplot(x=sorted_x, y=sorted_y, hue=actual_hue, palette=palette)
+    barplot(x=sorted_x, y=sorted_y, hue=actual_hue, palette=colors)
 
 
 @setup_graph

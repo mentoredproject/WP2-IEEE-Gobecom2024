@@ -12,15 +12,16 @@ def load_file(filepath: str):
         return json.load(file_reader)
 
 
-def organize_data(algorithms: List[str], performance: Dict[str, str], metric_name: str):
-    algorithms_map={"RandomForestClassifier()":"Random Forest",
-     "SVC()":"SVM",
-     "DecisionTreeClassifier()":"DT",
-     "KNeighborsClassifier()":"KNN"}
+def organize_data(performance: Dict[str, str], metric_name: str):
+    algorithms_map = {
+        "RandomForestClassifier()": "Random Forest",
+        "SVC()": "SVM",
+        "DecisionTreeClassifier()": "DT",
+        "KNeighborsClassifier()": "KNN"}
     algorithm_names = []
     average_accuracy = []
     strategies = []
-    for algorithm in algorithms:
+    for algorithm in algorithms_map.keys():
         for strategy in performance:
             algorithm_names.append(algorithms_map[algorithm])
             average_accuracy.append(get_performance(
@@ -29,9 +30,6 @@ def organize_data(algorithms: List[str], performance: Dict[str, str], metric_nam
                 strategy,
                 metric_name))
             strategies.append(strategy)
-    #algorithm_names = list(map(
-    #    lambda name: name.replace("()", ""),
-    #    algorithm_names))
     return algorithm_names, average_accuracy, strategies
 
 
@@ -49,24 +47,18 @@ def main():
     performance = {}
     for file in files:
         performance[file.split("_")[0]] = load_file(file)
-    algorithms = [
-        "RandomForestClassifier()",
-        "SVC()",
-        "DecisionTreeClassifier()",
-        "KNeighborsClassifier()"]
     metric_names = {"Average accuracy": "Accuracy", "Average recall": "Recall", "Average f1_score": "F1 score"}
     byte_overhead = load_file(argv[2])
-    print(byte_overhead)
     for metric_name, metric_label in metric_names.items():
-        algorithm_names, average_accuracy, strategies = organize_data(algorithms, performance, metric_name)
+        algorithm_names, average_accuracy, strategies = organize_data(performance, metric_name)
         make_barplot(
             algorithm_names,
             average_accuracy,
             x_label="Classifier",
             y_label=f"{metric_label} (%)",
             filename=f"{metric_name.replace(' ', '_')}.png",
-            hue=strategies)
-        print(strategies)
+            hue=strategies,
+            strategy_names=strategies)
         byte_overhead_per_strategy = [byte_overhead[strategy] * 100 for strategy in strategies]
         make_scatterplot(
             average_accuracy,
@@ -77,8 +69,16 @@ def main():
             hue=algorithm_names,
             style=strategies)
         unique_strategies = list(set(strategies))
-        byte_overhead_strategy = [byte_overhead[strategy] *100 for strategy in unique_strategies]
-        make_barplot(unique_strategies,byte_overhead_strategy,x_label="strategies",y_label="byte overhead (%)",filename="byte_overhead.png",hue=unique_strategies,order=True)
+        byte_overhead_strategy = [byte_overhead[strategy] * 100 for strategy in unique_strategies]
+        make_barplot(
+            unique_strategies,
+            byte_overhead_strategy,
+            x_label="strategies",
+            y_label="byte overhead (%)",
+            filename="byte_overhead.png",
+            hue=unique_strategies,
+            strategy_names=strategies,
+            order=True)
 
 
 if __name__ == "__main__":
