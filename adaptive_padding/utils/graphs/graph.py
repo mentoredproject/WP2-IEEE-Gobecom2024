@@ -27,7 +27,7 @@ class SingletonPalette:
             cls.instance = super().__new__(cls)
             cls.colors = {key: value for key, value in zip(
                 kwargs["names"],
-                color_palette("colorblind", n_colors=len(kwargs["names"])))}
+                color_palette("husl", n_colors=len(kwargs["names"])))}
         return cls.instance
 
 
@@ -43,15 +43,16 @@ def setup_graph(func):
     def wrapper(*args, **kwargs):
         plt.figure(figsize=(14, 6))
         func(*args, **kwargs)
-        plt.xlabel(kwargs["x_label"])
-        plt.ylabel(kwargs["y_label"])
+        plt.xlabel(kwargs["x_label"],fontsize=18)
+        plt.ylabel(kwargs["y_label"],fontsize=18)
         plt.legend(
             loc="upper center",
             bbox_to_anchor=(0.5, 1.05),
             ncol=len(args[1]),
             fancybox=True,
+	        fontsize=14,
             shadow=True)
-        plt.xticks(rotation=45, ha="right")
+        plt.xticks(fontsize=18)
         plt.savefig(kwargs["filename"], bbox_inches="tight")
     return wrapper
 
@@ -80,6 +81,6 @@ def make_barplot(
 
 @setup_graph
 def make_scatterplot(x, y, x_label: str, y_label: str, filename: str, hue: List[str], style: List[str]):
-    palette = color_palette("colorblind", n_colors=len(x) // NUMBER_ALGORITHMS)
+    palette = color_palette("husl", n_colors=len(x) // NUMBER_ALGORITHMS)
     scatterplot(x=x, y=y, hue=hue, palette=palette, style=style)
     plt.ylim(min(y) * 0.9, max(y) * 1.10)
