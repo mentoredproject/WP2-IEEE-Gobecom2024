@@ -1,3 +1,5 @@
+import json
+from sys import argv
 from typing import List, Any, Tuple
 
 from seaborn import barplot, color_palette, set_style, scatterplot
@@ -25,9 +27,10 @@ class SingletonPalette:
     def __new__(cls, *args, **kwargs):
         if cls.instance is None:
             cls.instance = super().__new__(cls)
+            data = json.load(open(argv[3], mode="r"))
             cls.colors = {key: value for key, value in zip(
-                kwargs["names"],
-                color_palette("husl", n_colors=len(kwargs["names"])))}
+                data["names"],
+                color_palette("husl", n_colors=len(data["names"])))}
         return cls.instance
 
 
@@ -43,14 +46,14 @@ def setup_graph(func):
     def wrapper(*args, **kwargs):
         plt.figure(figsize=(14, 6))
         func(*args, **kwargs)
-        plt.xlabel(kwargs["x_label"],fontsize=18)
-        plt.ylabel(kwargs["y_label"],fontsize=18)
+        plt.xlabel(kwargs["x_label"], fontsize=18)
+        plt.ylabel(kwargs["y_label"], fontsize=18)
         plt.legend(
             loc="upper center",
             bbox_to_anchor=(0.5, 1.05),
             ncol=len(args[1]),
             fancybox=True,
-	        fontsize=14,
+            fontsize=14,
             shadow=True)
         plt.xticks(fontsize=18)
         plt.savefig(kwargs["filename"], bbox_inches="tight")
@@ -67,7 +70,7 @@ def make_barplot(
         hue: List[str],
         strategy_names: List[str],
         order: bool = False):
-    singleton_palette = SingletonPalette(names=list(set(strategy_names)))
+    singleton_palette = SingletonPalette()
     colors = singleton_palette.colors
     if order:
         sorted_x, sorted_y = _sort_values(x, y)
