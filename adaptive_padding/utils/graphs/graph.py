@@ -44,7 +44,7 @@ def sort_values(x, y) -> Tuple[List[Any], List[Any]]:
 
 def setup_graph(func):
     def wrapper(*args, **kwargs):
-        plt.figure(figsize=(14, 6))
+        plt.figure(figsize=(14, 8))
         func(*args, **kwargs)
         plt.xlabel(kwargs["x_label"], fontsize=18)
         plt.ylabel(kwargs["y_label"], fontsize=18)
@@ -56,6 +56,7 @@ def setup_graph(func):
             fontsize=16,
             shadow=True)
         plt.xticks(fontsize=18)
+        plt.yticks(fontsize=18) 
         plt.savefig(kwargs["filename"], bbox_inches="tight")
     return wrapper
 
