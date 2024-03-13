@@ -1,7 +1,7 @@
 from typing import Dict, List
 from sys import argv
 
-from adaptive_padding.utils.graphs.graph import make_barplot, make_scatterplot
+from adaptive_padding.utils.graphs.graph import make_barplot, make_scatterplot, sort_values
 
 import json
 from glob import glob
@@ -22,14 +22,20 @@ def organize_data(performance: Dict[str, str], metric_name: str):
     average_accuracy = []
     strategies = []
     for algorithm in algorithms_map.keys():
+        average_accuracy_per_algorithm = []
+        strategies_per_algorithm = []
         for strategy in performance:
             algorithm_names.append(algorithms_map[algorithm])
-            average_accuracy.append(get_performance(
+            average_accuracy_per_algorithm.append(get_performance(
                 algorithm,
                 performance,
                 strategy,
                 metric_name))
-            strategies.append(strategy)
+            strategies_per_algorithm.append(strategy)
+        strategies_per_algorithm, average_accuracy_per_algorithm =\
+            sort_values(strategies_per_algorithm, average_accuracy_per_algorithm)
+        average_accuracy.extend(average_accuracy_per_algorithm)
+        strategies.extend(strategies_per_algorithm)
     return algorithm_names, average_accuracy, strategies
 
 
@@ -57,8 +63,7 @@ def main():
             x_label="Classifier",
             y_label=f"{metric_label} (%)",
             filename=f"{metric_name.replace(' ', '_')}.png",
-            hue=strategies,
-            strategy_names=strategies)
+            hue=strategies)
         byte_overhead_per_strategy = [byte_overhead[strategy] * 100 for strategy in strategies]
         make_scatterplot(
             average_accuracy,
@@ -77,7 +82,6 @@ def main():
             y_label="byte overhead (%)",
             filename="byte_overhead.png",
             hue=unique_strategies,
-            strategy_names=strategies,
             order=True)
 
 

@@ -34,7 +34,7 @@ class SingletonPalette:
         return cls.instance
 
 
-def _sort_values(x, y) -> Tuple[List[Any], List[Any]]:
+def sort_values(x, y) -> Tuple[List[Any], List[Any]]:
     zipped = zip(y, x)
     sorted_values = sorted(zipped, reverse=True)
     sorted_x = [x for _, x in sorted_values]
@@ -68,12 +68,11 @@ def make_barplot(
         y_label: str,
         filename: str,
         hue: List[str],
-        strategy_names: List[str],
         order: bool = False):
     singleton_palette = SingletonPalette()
     colors = singleton_palette.colors
     if order:
-        sorted_x, sorted_y = _sort_values(x, y)
+        sorted_x, sorted_y = sort_values(x, y)
         actual_hue = sorted_x
     else:
         sorted_x = x
