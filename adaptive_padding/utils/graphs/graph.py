@@ -49,11 +49,11 @@ def setup_graph(func):
         plt.xlabel(kwargs["x_label"], fontsize=18)
         plt.ylabel(kwargs["y_label"], fontsize=18)
         plt.legend(
-            loc="upper center",
-            bbox_to_anchor=(0.5, 1.05),
-            ncol=len(args[1]),
+            loc="center left",
+            bbox_to_anchor=(0.9, 0.5),
+            ncol=1,
             fancybox=True,
-            fontsize=14,
+            fontsize=16,
             shadow=True)
         plt.xticks(fontsize=18)
         plt.savefig(kwargs["filename"], bbox_inches="tight")
