@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 from concurrent.futures import ThreadPoolExecutor
 from os import cpu_count
@@ -8,6 +9,7 @@ from typing import Tuple
 
 import numpy as np
 import pandas as pd
+import typer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, recall_score, f1_score
 from sklearn.model_selection import StratifiedKFold
@@ -16,10 +18,10 @@ from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 from tqdm import tqdm
 
-from adaptive_padding.constants import FolderPath
+from adaptive_padding.constants import FolderPath, ATTACKER
 from adaptive_padding.experiment.evaluation import ExperimentConfiguration
 
-import typer
+logging.basicConfig(level=logging.INFO)
 
 seed(42)
 
@@ -161,7 +163,6 @@ class Experiment:
 			for classifier in self.classifiers:
 				self.y_pred = classifier.predict(self.X_test)
 				self.accuracy, self.recall, self.f1_measurement = self.compute_classifier_performance()
-				
 				self.update_classifiers_performance(classifier)
 				self.write_file(classifier, filename, f"{self.__padding_strategy}_train_test_split.txt")
 
@@ -172,11 +173,11 @@ class Experiment:
 		Evaluates classifiers only on the attributes of traffic changed by padding strategies. 
 		Models are trained and tested on the same datasets using the cross-validation technique. 
 		"""
-		for filename in self.filenames:
+		for filename in tqdm(self.filenames):
 			self.test_data = pd.read_csv(os.path.join(
 				self.__padding_folder_features,
 				self.__padding_strategy,
-				f"{filename}.csv_features.csv"))
+				f"{filename.replace('.csv', '.xz')}_features.csv"))
 
 			self.X = self.test_data[['avg', 'std', 'total']].values
 			self.y = self.test_data['label'].values
@@ -185,20 +186,21 @@ class Experiment:
 				self.X_train, self.X_test = self.X[train_index], self.X[test_index]
 				self.y_train, self.y_test = self.y[train_index], self.y[test_index]
 
-				for classifier in self.classifiers:
-					classifier.fit(self.X_train, self.y_train)
+				with ThreadPoolExecutor(max_workers=cpu_count()) as executor:
+					executor.map(
+						lambda cls: cls.fit(self.X_train, self.y_train),
+						self.classifiers)
 
 				for classifier in self.classifiers:
 					self.y_pred = classifier.predict(self.X_test)
 					self.accuracy, self.recall, self.f1_measurement = self.compute_classifier_performance()
-					
 					self.update_classifiers_performance(classifier)
 					self.write_file(classifier, filename, f"{self.__padding_strategy}_cross_validation.txt")
 
 		self.save_classifiers_performance_to_file(f"{self.__padding_strategy}_cross_validation.json")
 
 
-def main(filename: str = ""):
+def main(filename: str = "", attacker: str = ""):
 	configuration_file = os.path.join(FolderPath.CONFIGURATION.value, filename)
 	experiment_configuration = ExperimentConfiguration()
 	setup = experiment_configuration.load_configuration(configuration_file)
@@ -209,7 +211,10 @@ def main(filename: str = ""):
 			padding_strategy=strategy,
 			ground_truth_folder_features=join(FolderPath.GROUND_TRUTH_FEATURES.value),
 			padding_folder_features=join(FolderPath.PADDING_FEATURES.value))
-		experiment.run_train_test_split()
+		if attacker == ATTACKER.EXTERNAL.value:
+			experiment.run_train_test_split()
+		elif attacker == ATTACKER.INTERNAL.value:
+			experiment.run_cross_validation()
 
 
 if __name__ == "__main__":

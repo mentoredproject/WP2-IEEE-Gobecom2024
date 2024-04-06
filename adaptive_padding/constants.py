@@ -8,3 +8,8 @@ class FolderPath(Enum):
     PADDING_FEATURES = join("Data", "Processed", "padding_features")
     GROUND_TRUTH_FEATURES = join("Data", "Processed", "ground_truth_features")
     CONFIGURATION = join("Data", "Configuration")
+
+
+class ATTACKER(Enum):
+    INTERNAL = "internal"
+    EXTERNAL = "external"

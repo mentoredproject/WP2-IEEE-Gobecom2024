@@ -101,8 +101,10 @@ poetry run python3 adaptive_padding/prepare_features.py --filename proposal_expe
 ### Evaluate privacy improvement
 This step can take a long time, depending on the computational power in which the experiment is carried out.
 ```sh
-poetry run python3 adaptive_padding/padding_strategies_evaluation.py --filename existing_experiment_configuration.json
-poetry run python3 adaptive_padding/padding_strategies_evaluation.py --filename proposal_experiment_configuration.json
+poetry run python3 adaptive_padding/padding_strategies_evaluation.py --filename existing_experiment_configuration.json --attacker internal
+poetry run python3 adaptive_padding/padding_strategies_evaluation.py --filename existing_experiment_configuration.json --attacker external
+poetry run python3 adaptive_padding/padding_strategies_evaluation.py --filename proposal_experiment_configuration.json --attacker internal
+poetry run python3 adaptive_padding/padding_strategies_evaluation.py --filename proposal_experiment_configuration.json --attacker external
 ```
 At the end of executing this script, two files are created for each strategy evaluated. The ```.txt``` file contains the results for each CSV file, while the ```.json``` calculates average, minimum and maximum for each performance metric evaluated.
 

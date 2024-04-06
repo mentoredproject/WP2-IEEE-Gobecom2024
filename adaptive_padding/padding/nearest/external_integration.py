@@ -3,7 +3,6 @@ from dataclasses import dataclass
 from subprocess import run, PIPE
 from typing import List
 
-
 class ExternalIntegration(ABC):
     @abstractmethod
     def execute(self) -> List[int]:
