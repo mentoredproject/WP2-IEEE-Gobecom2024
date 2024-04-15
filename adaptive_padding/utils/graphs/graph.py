@@ -4,6 +4,7 @@ from typing import List, Any, Tuple
 
 from seaborn import barplot, color_palette, set_style, scatterplot
 import matplotlib.pyplot as plt
+plt.rcParams['figure.dpi'] = 300
 
 set_style("whitegrid")
 
@@ -46,16 +47,17 @@ def setup_graph(func):
     def wrapper(*args, **kwargs):
         plt.figure(figsize=(14, 6))
         func(*args, **kwargs)
-        plt.xlabel(kwargs["x_label"], fontsize=18)
-        plt.ylabel(kwargs["y_label"], fontsize=18)
+        plt.xlabel(kwargs["x_label"], fontsize=20)
+        plt.ylabel(kwargs["y_label"], fontsize=20)
         plt.legend(
-            loc="center left",
+            loc="lower left",
             bbox_to_anchor=(0.9, 0.5),
             ncol=1,
             fancybox=True,
-            fontsize=16,
+            fontsize=18,
             shadow=True)
-        plt.xticks(fontsize=18)
+        plt.xticks(fontsize=20)
+        plt.yticks(fontsize=20)
         plt.savefig(kwargs["filename"], bbox_inches="tight")
     return wrapper
 
