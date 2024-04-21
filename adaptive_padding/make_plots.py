@@ -63,7 +63,8 @@ def main():
             x_label="Classifier",
             y_label=f"{metric_label} (%)",
             filename=f"{metric_name.replace(' ', '_')}.png",
-            hue=strategies)
+            hue=strategies,
+            y_lim=(0, 85))
         byte_overhead_per_strategy = [byte_overhead[strategy] * 100 for strategy in strategies]
         make_scatterplot(
             average_accuracy,

@@ -1,7 +1,8 @@
 import json
 from sys import argv
-from typing import List, Any, Tuple
+from typing import List, Any, Tuple, Union
 
+from matplotlib.axes import Axes
 from seaborn import barplot, color_palette, set_style, scatterplot
 import matplotlib.pyplot as plt
 plt.rcParams['figure.dpi'] = 300
@@ -62,6 +63,14 @@ def setup_graph(func):
     return wrapper
 
 
+def set_y_lim(y_lim: Tuple[Union[float, int]] = None):
+    if y_lim is not None:
+        plt.ylim(*y_lim)
+
+def add_labels(ax: Axes):
+    for i in ax.containers:
+        ax.bar_label(i, )
+
 @setup_graph
 def make_barplot(
         x,
@@ -70,7 +79,8 @@ def make_barplot(
         y_label: str,
         filename: str,
         hue: List[str],
-        order: bool = False):
+        order: bool = False,
+        y_lim: Tuple[int, int] = None):
     singleton_palette = SingletonPalette()
     colors = singleton_palette.colors
     if order:
@@ -80,7 +90,10 @@ def make_barplot(
         sorted_x = x
         sorted_y = y
         actual_hue = hue
-    barplot(x=sorted_x, y=sorted_y, hue=actual_hue, palette=colors)
+    rounded_values = list(map(lambda a: round(a, 2), sorted_y))
+    ax = barplot(x=sorted_x, y=rounded_values, hue=actual_hue, palette=colors)
+    add_labels(ax)
+    set_y_lim(y_lim)
 
 
 @setup_graph
