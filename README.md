@@ -1,5 +1,5 @@
-<h2>Adaptive Packet Padding Approach for Smart Home Networks: A Tradeoff Between Privacy and Performance</h2>
-Guide for conducting the experiments described in the paper "Adaptive Packet Padding Approach for Smart Home Networks: A Tradeoff Between Privacy and Performance":
+<h2>Optimal Packet Padding for IoT Traffic Obfuscation</h2>
+Guide for conducting the experiments described in the paper "Optimal Packet Padding for IoT Traffic Obfuscation":
 
 - The experiment configuration is defined in the file "Data/Configuration/experiment_configuration.json". In this file, specify the padding type (Proposal or Existing) and the strategy (100, 500, 700, 900, mtu, random, random255, exponential, linear, and mouse_elephant);
 - Produce the features for the original IoT traffic with the script "prepare_features.py". Please, in file "Data/Configuration/experiment_configuration.json", set 'None' for padding and paddingStrategy. Use these features to evaluate padding strategies;
@@ -17,11 +17,7 @@ The files were converted from PCAP files made available by the authors of "A. Si
 
 If you use this code in a publication please cite the following paper:
 
-A. J. Pinheiro, P. Freitas de Araujo-Filho, J. de M. Bezerra and D. R. Campelo, "Adaptive Packet Padding Approach for Smart Home Networks: A Tradeoff Between Privacy and Performance," in IEEE Internet of Things Journal, 2021.
-
-@ARTICLE{9203848,  
-author={Pinheiro, Antônio J. and Freitas de Araujo-Filho, Paulo and de M. Bezerra, Jeandro and Campelo, Divanilson R.},  journal={IEEE Internet of Things Journal},  title={Adaptive Packet Padding Approach for Smart Home Networks: A Tradeoff Between Privacy and Performance},  year={2021},  volume={8},  number={5},  pages={3930-3938},  doi={10.1109/JIOT.2020.3025988}}
-
+DE SOUZA, CRÍSTON P. ; BEZERRA, J. M. ; PINHEIRO, A. J. ; NOGUEIRA, M.. "Optimal Packet Padding for IoT Traffic Obfuscation," In: IEEE Global Communications Conference (GLOBECOM), 2024, Cape Town.
 
 ## Configuring the environment for running Julia
 
